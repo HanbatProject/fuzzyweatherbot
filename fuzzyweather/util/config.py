@@ -3,14 +3,13 @@
 import configparser
 from fuzzyweather.util.logger import log
 
-config = configparser.ConfigParser()
+config = configparser.RawConfigParser()
 config.read('setting.ini')
 
 if not config.has_section('credentials'):
     config.add_section('credentials')
-    config.set('credentials', 'TOKEN', '')
-    # config.set('credentials', 'HOST', '')
-    # config.set('credentials', 'PORT', '8443')
+    config.set('credentials', 'token', '')
+    config.set('credentials', 'channel_id', '@')
 
 if not config.has_section('configs'):
     config.add_section('configs')
@@ -21,14 +20,11 @@ with open('setting.ini', 'w') as setting:
     config.write(setting)
     setting.close()
 
-TOKEN = config.get('credentials', 'TOKEN')
-# HOST = config.get('credentials', 'HOST')
-# PORT = config.get('credentials', 'PORT')
+TOKEN = config.get('credentials', 'token')
+CHANNEL_ID = config.get('credentials', 'channel_id')
 
-MORNING_ALARM_TIME = 8
-EVENING_ALARM_TIME = 20
 try:
-    MORNING_ALARM_TIME = config.getint('configs', 'MORNING_ALARM_TIME')
-    EVENING_ALARM_TIME = config.getint('configs', 'EVENING_ALARM_TIME')
+    ALARM_TIME = config.get('configs', 'alarm_time')
 except ValueError as e:
+    ALARM_TIME = '8 19'
     log.warn("알람 타임이 비어있습니다!")
